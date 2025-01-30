@@ -1,0 +1,32 @@
+version: "3.9"
+services:
+  nginx:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.nginx
+    image: vvasylkovskyi1/blog-nginx:latest
+    restart: on-failure
+    ports:
+      - "443:443"
+    networks:
+      - nginx_network
+    depends_on:
+      - server
+
+  server:
+    # build:
+    #   context: .
+    #   dockerfile: Dockerfile.server
+    #   args:
+    #     - NODE_SERVER_URL=https://www.vvasylkovskyi.com
+    #     - BUNDLE_PATH=dist
+    image: vvasylkovskyi1/blog-server:latest
+    restart: always
+    ports:
+      - "3006:3006"
+    networks:
+      - nginx_network
+
+networks:
+  nginx_network:
+    driver: bridge

@@ -1,0 +1,61 @@
+@import '../../scss/variables.scss';
+
+.skill__card {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 10px;
+}
+
+.skill-title {
+  font-size: 16px;
+  line-height: 30px;
+  letter-spacing: 0.02em;
+  font-weight: $medium;
+  margin-left: 30px;
+  margin-bottom: 0;
+  margin-top: 0;
+}
+
+.skill-icon__container {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (min-width: 992px) {
+  .skill__card:first-child {
+    margin: 0;
+  }
+
+  .skill-title {
+    font-size: 18px;
+    line-height: 30px;
+    letter-spacing: 0.02em;
+  }
+
+  .skill__card {
+    width: 100%;
+    background: #1e1e1e;
+    border: 1px solid $light-grey;
+    height: 72px;
+    border-radius: $border-radius;
+  }
+
+  .skill__card:hover,
+  .skill__card:focus {
+    background: $light-grey;
+    border: 1px solid $faded-white;
+    cursor: pointer;
+  }
+
+  .skill-item__wrapper:nth-child(3) {
+    padding-right: 0;
+  }
+
+  .skill-icon__container {
+    width: 45px;
+    margin-left: 20px;
+  }
+}

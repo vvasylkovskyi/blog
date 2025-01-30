@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/lerna/schemas/lerna-schema.json",
+  "useWorkspaces": true,
+  "command": {
+    "init": {
+      "exact": true
+    },
+    "publish": {
+      "exact": true
+    }
+  },
+  "version": "2.0.1",
+  "npmClient": "npm",
+  "npmClientArgs": ["--no-ci"]
+}

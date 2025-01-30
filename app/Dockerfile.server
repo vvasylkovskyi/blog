@@ -1,0 +1,47 @@
+FROM node:18 AS server-builder
+WORKDIR /app
+
+COPY ./blog-content ./blog-content
+WORKDIR /app/server
+
+COPY ./server/package.json ./server/package-lock.json* /app/server/
+ARG NODE_SERVER_URL
+ARG BUNDLE_PATH
+ENV NODE_SERVER_URL=$NODE_SERVER_URL
+ENV BUNDLE_PATH=$BUNDLE_PATH
+
+RUN npm install
+COPY ./server/ /app/server/
+RUN npm run build:prod
+
+
+FROM node:18 AS client-builder
+WORKDIR /app
+
+COPY ./blog-content ./blog-content
+WORKDIR /app/web
+
+COPY ./web/package.json ./web/package-lock.json* /app/web/
+ARG NODE_SERVER_URL
+ARG BUNDLE_PATH
+ENV NODE_SERVER_URL=$NODE_SERVER_URL
+ENV BUNDLE_PATH=$BUNDLE_PATH
+
+RUN npm install
+COPY ./web/ /app/web/
+RUN npm run build:prod
+
+FROM node:16.13.1-alpine AS starter
+
+WORKDIR /app/server
+COPY --from=server-builder /app/blog-content ./blog-content
+COPY --from=client-builder /app/web/dist ./dist-client
+COPY --from=server-builder /app/server/dist ./dist-server
+COPY --from=server-builder /app/server/node_modules ./node_modules
+
+WORKDIR /app/server/dist-server
+
+CMD ["node", "./server.js"]
+
+
+

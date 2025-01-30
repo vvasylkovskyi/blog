@@ -1,0 +1,23 @@
+{
+  "name": "root",
+  "private": true,
+  "workspaces": [
+    "packages/core-ui",
+    "server",
+    "web"
+  ],
+  "scripts": {
+    "build": "lerna run build",
+    "watch": "lerna watch -- lerna run build --since",
+    "update:changelog": "changeset",
+    "merge:changelog": "changeset version"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.15",
+    "lerna": "^6.5.1",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "@changesets/cli": "^2.27.1"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "name": "@vvasylkovskyi/server",
+  "version": "0.2.0",
+  "scripts": {
+    "watch": "webpack --config webpack.server.dev.ts --watch",
+    "build": "BUNDLE_PATH=../dist-server webpack --config webpack.server.dev.ts",
+    "build:prod": "BUNDLE_PATH=dist webpack --config webpack.server.prod.ts",
+    "start": "PORT=443 nodemon ../dist-server/server.js",
+    "start:prod": "node ../dist-server/server.js"
+  },
+  "main": "./src/index.tsx",
+  "dependencies": {
+    "@vvasylkovskyi/core-ui": "2.2.0",
+    "compression": "^1.7.4",
+    "fs": "^0.0.1-security",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.18.0",
+    "express": "4.18.2"
+  },
+  "devDependencies": {
+    "@types/compression": "^1.7.5",
+    "@types/react": "^18.2.31",
+    "@types/react-dom": "^18.2.14",
+    "@types/react-router-dom": "^5.3.3",
+    "@types/webpack-node-externals": "^3.0.3",
+    "@types/express": "4.17.17",
+    "css-loader": "^6.7.3",
+    "gts": "^3.1.1",
+    "nodemon": "^3.0.1",
+    "sass": "^1.65.1",
+    "sass-loader": "^13.3.2",
+    "terser-webpack-plugin": "^5.3.9",
+    "ts-loader": "^9.5.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.4.2",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.0.1",
+    "webpack-merge": "^5.10.0",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "gitHead": "ad40359df08d43c487937ec0c907e52933586496"
+}
