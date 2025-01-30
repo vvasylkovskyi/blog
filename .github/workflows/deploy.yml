@@ -1,0 +1,65 @@
+name: CI
+
+# 1
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push events but only for the master branch
+  push:
+    branches: [main]
+    # Allows you to run this workflow manually from the Actions tab
+    workflow_dispatch:
+      inputs:
+      version:
+        description: "Deploy Blog Server"
+        required: true
+
+jobs:
+  build_and_push_and_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build Server Container Image
+        run: |
+          cd app
+          docker build -f Dockerfile.server -t ${{ secrets.DOCKER_USERNAME }}/blog-server --platform linux/amd64 .
+
+      - name: Push Server Container Image
+        run: |
+          docker push ${{ secrets.DOCKER_USERNAME }}/blog-server
+
+      - name: Add SSH Keys
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSHKEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Move docker-compose to remote host
+        run: |
+          cd app
+          scp -o StrictHostKeyChecking=no ./docker-compose.yml ${{ secrets.REMOTE_SSH_ACCESS_STRING }}:/root/docker-compose.yml
+
+      - name: Login to Docker on remote host
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_SSH_ACCESS_STRING }} << 'ENDSSH'
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          ENDSSH
+
+      - name: Pull Docker Images
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_SSH_ACCESS_STRING }} << 'ENDSSH'
+          docker pull ${{ secrets.DOCKER_USERNAME }}/blog-server
+
+      - name: Restart Docker Images
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.REMOTE_SSH_ACCESS_STRING }} << 'ENDSSH'
+          docker stop $(docker ps -q)
+          docker rm $(docker ps -aq)
+          docker-compose up -d
