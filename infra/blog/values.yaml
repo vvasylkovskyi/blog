@@ -1,0 +1,22 @@
+replicaCount: 1
+
+image:
+  repository: vvasylkovskyi1/blog-server
+  tag: latest
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 3006
+
+ingress:
+  enabled: true
+  className: ""
+  annotations: {}
+  host: www.vvasylkovskyi.com
+  tls: []
+
+resources: {}
+nodeSelector: {}
+tolerations: []
+affinity: {}

@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  owa:
+    image: vladk1m0/docker-owa:latest
+    container_name: open-web-analytics
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: owa_db
+      MYSQL_USER: my_sql_owa
+      MYSQL_PASSWORD: my_sql_owa_1234567
+    network_mode: "host"
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "5"

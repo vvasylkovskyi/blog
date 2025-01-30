@@ -1,0 +1,21 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-vvasylkovskyi-com
+  namespace: default
+  labels:
+    app.kubernetes.io/managed-by: Helm
+  annotations:
+    meta.helm.sh/release-name: blog
+    meta.helm.sh/release-namespace: default
+spec:
+  secretName: wildcard-vvasylkovskyi-com-tls # Secret where the certificate will be stored
+  issuerRef:
+    name: letsencrypt-prod # Matches the ClusterIssuer you created
+    kind: ClusterIssuer
+  commonName: "*.vvasylkovskyi.com"
+  dnsNames:
+    - "*.vvasylkovskyi.com"
+    - "vvasylkovskyi.com"
+  duration: 2160h  # 90 days
+  renewBefore: 360h  # 15 days before expiration
